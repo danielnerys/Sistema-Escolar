@@ -15,6 +15,10 @@ public interface IAlunoDAO {
     List<Aluno> listarTodosAlunos();
 
 
+
+
+    Aluno buscarAlunoPorID(int id);
+
     //U -> update
     void atualizarAluno(Aluno aluno);
 
