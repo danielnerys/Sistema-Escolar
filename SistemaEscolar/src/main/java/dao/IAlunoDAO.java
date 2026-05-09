@@ -3,6 +3,7 @@ package dao;
 import model.Aluno;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IAlunoDAO {
     //CRUD
@@ -17,7 +18,7 @@ public interface IAlunoDAO {
 
 
 
-    Aluno buscarAlunoPorID(int id);
+    Optional<Aluno> buscarAlunoPorID(int id);
 
     //U -> update
     void atualizarAluno(Aluno aluno);

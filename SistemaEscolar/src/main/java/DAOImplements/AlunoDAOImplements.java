@@ -10,14 +10,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AlunoDAOImplements implements IAlunoDAO {
     @Override
     public void salvar(Aluno aluno) {
-        String sql = String.format("INSERT INTO ALUNO (nome, cpf, email, data_nascimento, telefone) VALUES (%s, %s, %s, %s, %s)", aluno.getNome(), aluno.getCpf(), aluno.getEmail(), aluno.getData_nascimento(), aluno.getTelefone());
 
         try(Connection conn = sqlConn.getConnection()){
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            String sql = "INSERT INTO ALUNO (nome, cpf, email, data_nascimento, telefone) VALUES (?, ?, ? ,?, ?)";
+            try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+                pstmt.setString(1, aluno.getNome());
+                pstmt.setString(2, aluno.getCpf());
+                pstmt.setString(3, aluno.getEmail());
+                pstmt.setObject(4, aluno.getData_nascimento());
+                pstmt.setString(5, aluno.getTelefone());
+
+                int rowAffected = pstmt.executeUpdate();
+                System.out.println("Atualizacoes realizadas " + rowAffected );
+            }catch (SQLException e){
+                System.err.println(e.getMessage());
+            }
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -50,36 +63,52 @@ public class AlunoDAOImplements implements IAlunoDAO {
     }
 
     @Override
-    public Aluno buscarAlunoPorID(int id){
+    public Optional<Aluno> buscarAlunoPorID(int id){
         String sql = String.format("Select * from aluno where id = %s", id);
         try(Connection conn = sqlConn.getConnection()){
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
-                return new Aluno(
+                Aluno aluno =  new Aluno(
                         rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getString("cpf"),
                         rs.getString("email"),
                         rs.getDate("data_nascimento").toLocalDate(),
                         rs.getString("telefone"));
+                return Optional.of(aluno);
             }
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        return null;
+        return Optional.empty();
     }
 
 
     @Override
     public void atualizarAluno(Aluno aluno) {
 
+
     }
 
     @Override
     public void excluirAluno(int id) {
+        try(Connection conn = sqlConn.getConnection()){
+            String sql = "DELETE FROM ALUNO WHERE ID = ?";
+            try(PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setInt(1, id);
+
+                int rowsAffected = stmt.executeUpdate();
+                System.out.println("Aluno exlcuido com sucesso" + rowsAffected);
+
+            }catch (SQLException e){
+                System.err.println(e.getMessage());
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
 
     }
 }
