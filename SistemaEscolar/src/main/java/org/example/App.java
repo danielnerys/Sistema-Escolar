@@ -21,7 +21,7 @@ public class App {
 
         AlunoDAOImplements alunoDAOMethods = new AlunoDAOImplements();
         do {
-            System.out.println("======= Menu =========");
+            System.out.println("\n======= Menu =========");
             System.out.println("1. Cadastrar Aluno");
             System.out.println("2. Atualizar Aluno");
             System.out.println("3. Excluir Aluno");
@@ -57,15 +57,40 @@ public class App {
                     break;
                 case 2:
                     System.out.println("Atualizar Aluno");
+                    System.out.println("Digite o Id do aluno que deseja atualizar: ");
+                    int idAtualizar = sc.nextInt();
+                    System.out.println("Escolha a opcao que deseja atualiza: ");
+                    System.out.println("[1] Nome");
+                    System.out.println("[2] Email ");
+                    System.out.println("[3] Telefone ");
+                    int opcaoAtualizar = sc.nextInt();
+                    switch (opcaoAtualizar) {
+                        case 1:
+                            System.out.println("Digite o novo valor para NOME: ");
+                            String novoNome = sc.next();
+                            alunoDAOMethods.atualizarAluno("nome", novoNome, idAtualizar);
+                            break;
+                        case 2:
+                            System.out.println("Digite o novo valor para email: ");
+                            String novoEmail = sc.next();
+                            alunoDAOMethods.atualizarAluno("email", novoEmail, idAtualizar);
+                            break;
+                        case 3:
+                            System.out.println("Digite o novo valor para telefone: ");
+                            String novoTelefone = sc.next();
+                            alunoDAOMethods.atualizarAluno("telefone", novoTelefone, idAtualizar);
+                            break;
+                    }
+
 
                     break;
                 case 3:
                     System.out.println("Excluir Aluno");
                     System.out.println("Digite o id do aluno que deseja excluir: ");
                     int id = sc.nextInt();
-                    try{
+                    try {
                         alunoDAOMethods.excluirAluno(id);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
                     break;

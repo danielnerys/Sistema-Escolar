@@ -4,13 +4,11 @@ import dao.IAlunoDAO;
 import database.sqlConn;
 import model.Aluno;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeMap;
 
 public class AlunoDAOImplements implements IAlunoDAO {
     @Override
@@ -22,7 +20,7 @@ public class AlunoDAOImplements implements IAlunoDAO {
                 pstmt.setString(1, aluno.getNome());
                 pstmt.setString(2, aluno.getCpf());
                 pstmt.setString(3, aluno.getEmail());
-                pstmt.setObject(4, aluno.getData_nascimento());
+                pstmt.setDate(4, Date.valueOf(aluno.getData_nascimento()));
                 pstmt.setString(5, aluno.getTelefone());
 
                 int rowAffected = pstmt.executeUpdate();
@@ -88,8 +86,22 @@ public class AlunoDAOImplements implements IAlunoDAO {
 
 
     @Override
-    public void atualizarAluno(Aluno aluno) {
+    public void atualizarAluno(String campo, String novoValor, Integer id) {
+        String sql = "UPDATE ALUNO SET "+ campo + " = ? WHERE ID = ? ";
+        try(Connection conn = sqlConn.getConnection()){
+            try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+//                pstmt.setString(1, campo);
+                pstmt.setString(1, novoValor);
+                pstmt.setInt(2, id);
+                int  rowAffected = pstmt.executeUpdate();
+                System.out.printf("Atualizado %s para %s no aluno id %s" ,campo, novoValor, id);
 
+            }catch (SQLException e){
+                System.err.println(e.getMessage());
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
 
     }
 

@@ -21,7 +21,7 @@ public interface IAlunoDAO {
     Optional<Aluno> buscarAlunoPorID(int id);
 
     //U -> update
-    void atualizarAluno(Aluno aluno);
+    void atualizarAluno(String a, String b, Integer c);
 
     //D -> delete
     void excluirAluno(int id);
