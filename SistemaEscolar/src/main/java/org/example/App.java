@@ -1,9 +1,11 @@
 package org.example;
 
 import DAOImplements.AlunoDAOImplements;
+import DAOImplements.TurmaDAOImplements;
 import database.sqlConn;
 //import jdk.vm.ci.meta.Local;
 import model.Aluno;
+import model.Turma;
 
 import java.sql.SQLException;
 import java.sql.SQLOutput;
@@ -20,6 +22,7 @@ public class App {
         int opcao;
 
         AlunoDAOImplements alunoDAOMethods = new AlunoDAOImplements();
+        TurmaDAOImplements turmaDAOMethods = new TurmaDAOImplements();
         do {
             System.out.println("\n======= Menu =========");
             System.out.println("1. Cadastrar Aluno");
@@ -27,7 +30,7 @@ public class App {
             System.out.println("3. Excluir Aluno");
             System.out.println("4. Listar Alunos");
             System.out.println("5. Buscar aluno por ID");
-            System.out.println("6. Sair do programa");
+            System.out.println("6. Listar todas turmas");
 
             opcao = sc.nextInt();
 
@@ -115,8 +118,15 @@ public class App {
                     }
                     break;
                 case 6:
-                    System.out.println("Saindo do programa...");
-                    opcao = 0;
+                    for(Turma t: turmaDAOMethods.listarTurmas()){
+                        System.out.println(t);
+                    }
+                    System.out.println("Digite o ID da turma que deseja ver os alunos");
+                    int idTurma = sc.nextInt();
+                    for(Aluno a: turmaDAOMethods.listarAlunosTurma(idTurma)){
+                        System.out.println(a);
+                    }
+
                     break;
             }
 
